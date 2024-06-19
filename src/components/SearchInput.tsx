@@ -4,25 +4,29 @@ import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { useState } from "react"
 
-export default function SearchInput() {
-    const [input, setInput] = useState('')
+interface Props {
+    placeholder: string
+    onSearch: (input: string) => void
+}
 
-    const search = () => {
-        console.log(input)
-    }
+export default function SearchInput({ placeholder, onSearch }: Props) {
+    const [input, setInput] = useState('')
 
     return (
         <div className="flex items-center space-x-2 px-10">
             <Input
                 type="input"
-                placeholder="Job"
+                placeholder={placeholder}
                 onChange={(e) => setInput(e.target.value)}
             />
             <Button
                 type="submit"
                 className="bg-blue-500"
-                onClick={search}
-            >Search</Button>
+                onClick={() => onSearch(input)}
+                disabled={!input}
+            >
+                Search
+            </Button>
         </div>
     );
 }

@@ -1,10 +1,15 @@
 import SearchInput from "@/components/SearchInput";
 
-export default function Home() {
+export async function searchJob(input: string) {
+  'use server'
+  console.log(input)
+}
+
+export default function JobWordMap() {
   return (
     <main>
       <div className="px-20">
-        <SearchInput />
+        <SearchInput placeholder="Job" onSearch={searchJob} />
       </div>
     </main>
   );
