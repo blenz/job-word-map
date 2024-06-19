@@ -1,4 +1,4 @@
-import SearchInput from "@/components/SearchInput";
+import SearchInput from "@/components/search-input";
 
 export async function searchJob(input: string) {
   'use server'
