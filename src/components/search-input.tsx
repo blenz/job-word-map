@@ -3,11 +3,12 @@ import { Button } from "@/components/ui/button"
 import { useState } from "react"
 
 interface Props {
+    loading: boolean
     placeholder: string
     onSearch: (input: string) => void
 }
 
-export default function SearchInput({ placeholder, onSearch }: Props) {
+export default function SearchInput({ loading, placeholder, onSearch }: Props) {
     const [input, setInput] = useState('')
 
     return (
@@ -16,12 +17,13 @@ export default function SearchInput({ placeholder, onSearch }: Props) {
                 type="input"
                 placeholder={placeholder}
                 onChange={(e) => setInput(e.target.value)}
+                disabled={loading}
             />
             <Button
                 type="submit"
                 className="bg-blue-500"
                 onClick={() => onSearch(input)}
-                disabled={!input}
+                disabled={!input || loading}
             >
                 Search
             </Button>
