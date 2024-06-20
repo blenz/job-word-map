@@ -1,5 +1,3 @@
-'use client'
-
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { useState } from "react"
@@ -13,7 +11,7 @@ export default function SearchInput({ placeholder, onSearch }: Props) {
     const [input, setInput] = useState('')
 
     return (
-        <div className="flex items-center space-x-2 px-10">
+        <div className="flex items-center space-x-2">
             <Input
                 type="input"
                 placeholder={placeholder}
