@@ -1,19 +1,23 @@
+'use client'
+
 import { useState } from "react";
 import { fetchWords } from "./actions";
+import { WordFreq } from "@/types";
 import SearchInput from "@/components/search-input";
+import WordCloud from "@/components/word-cloud";
+
 export default function App() {
-  const [words, setWords] = useState<string[]>([])
+  const [wordFreqs, setWords] = useState<WordFreq[]>([])
 
   const searchJob = async (job: string) => {
-    const words = await fetchWords(job)
-    setWords(words)
+    const wordFreqs = await fetchWords(job)
+    setWords(wordFreqs)
   }
 
   return (
-    <main>
-      <div className="px-20">
-        <SearchInput placeholder="Job" onSearch={searchJob} />
-      </div>
-    </main>
+    <div>
+      <SearchInput placeholder="Job" onSearch={searchJob} />
+      <WordCloud wordFreqs={wordFreqs} />
+    </div>
   );
 }
