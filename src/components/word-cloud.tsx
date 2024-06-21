@@ -19,7 +19,7 @@ export default function WordCloud({ wordFreqs, loading }: Props) {
 
     return (
         <div className="flex items-center justify-center overflow-auto my-10">
-            {!wordFreqs.length && <h2>Search a job...</h2>}
+            {!wordFreqs.length && !loading && <h2>Search a job...</h2>}
 
             {loading && (
                 <div className='flex items-center space-x-3'>

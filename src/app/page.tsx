@@ -23,7 +23,7 @@ export default function App() {
   return (
     <div>
       <SearchInput loading={loading} placeholder="Job" onSearch={searchJob} />
-      <WordCloud wordFreqs={wordFreqs} />
+      <WordCloud loading={loading} wordFreqs={wordFreqs} />
     </div>
   );
 }
