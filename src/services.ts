@@ -1,12 +1,12 @@
 import { WordFreq } from '@/types'
-import parseKeyWords from './providers/pos'
+import { parseKeyWords } from './providers/pos'
 
-export function createWordFreqs(descs: string[]): WordFreq[] {
+export function createWordFreqs(descs: string[], wordType: string): WordFreq[] {
     let wordFreqs: { [key: string]: number } = {}
 
     descs.forEach(desc => {
         const sanitizedDesc = desc.replace(/\W/g, ' ').split(' ').filter(w => w)
-        const parsedWords = parseKeyWords(sanitizedDesc)
+        const parsedWords = parseKeyWords(sanitizedDesc, wordType)
 
         parsedWords.forEach(word => {
             word = word.toLowerCase()

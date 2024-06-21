@@ -1,30 +1,79 @@
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
-import { useState } from "react"
+import { useEffect, useState } from "react"
+import { cn, capitalize } from "@/lib/utils"
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
+import { Command, CommandGroup, CommandItem } from "@/components/ui/command"
+import { ChevronsUpDown, Check } from "lucide-react"
 
 interface Props {
     loading: boolean
+    values: string[]
     placeholder: string
-    onSearch: (input: string) => void
+    onSearch: (input: string, value: string) => void
 }
 
-export default function SearchInput({ loading, placeholder, onSearch }: Props) {
+export default function SearchInput({ loading, values, placeholder, onSearch }: Props) {
     const [input, setInput] = useState('')
+    const [open, setOpen] = useState(false)
+    const [value, setValue] = useState('')
+
+    useEffect(() => setValue(values[0]), [values])
 
     return (
         <div className="flex justify-center bg-slate-400 shadow-inner p-8">
             <div className="flex space-x-2 w-full max-w-[40%]">
-                <Input
-                    type="input"
-                    placeholder={placeholder}
-                    onChange={(e) => setInput(e.target.value)}
-                    disabled={loading}
-                    onKeyDown={({ key }) => key === "Enter" && onSearch(input)}
-                />
+                <div className="flex">
+                    <Input
+                        type="input"
+                        placeholder={placeholder}
+                        onChange={e => setInput(e.target.value)}
+                        onKeyDown={({ key }) => key === "Enter" && onSearch(input, value)}
+                        disabled={loading}
+                        className="rounded-br-none rounded-tr-none focus-visible:ring-offset-0 focus-visible:ring-0"
+                    />
+
+                    <Popover open={open} onOpenChange={setOpen}>
+                        <PopoverTrigger asChild>
+                            <Button
+                                variant="outline"
+                                role="combobox"
+                                aria-expanded={open}
+                                className="w-[200px] justify-between rounded-bl-none rounded-tl-none"
+                                disabled={loading || !values.length}
+                            >
+                                {capitalize(values.find(val => val === value) || '')}
+                                <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                            </Button>
+                        </PopoverTrigger>
+                        <PopoverContent className="w-[200px] p-0">
+                            <Command>
+                                <CommandGroup>
+                                    {values.map(val => (
+                                        <CommandItem
+                                            key={val}
+                                            value={val}
+                                            onSelect={val => { setValue(val); setOpen(false) }}
+                                        >
+                                            <Check
+                                                className={cn(
+                                                    "mr-2 h-4 w-4",
+                                                    value === val ? "opacity-100" : "opacity-0"
+                                                )}
+                                            />
+                                            {capitalize(val)}
+                                        </CommandItem>
+                                    ))}
+                                </CommandGroup>
+                            </Command>
+                        </PopoverContent>
+                    </Popover>
+                </div>
+
                 <Button
                     type="submit"
                     className="bg-blue-500"
-                    onClick={() => onSearch(input)}
+                    onClick={() => onSearch(input, value)}
                     disabled={!input || loading}
                 >
                     Search
