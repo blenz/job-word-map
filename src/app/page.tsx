@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { getWordFreqs } from "./actions";
 import { WordFreq } from "@/types";
 import SearchInput from "@/components/search-input";
