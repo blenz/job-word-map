@@ -4,7 +4,8 @@ const lexicon = new natural.Lexicon('EN', 'N', 'NNP');
 const ruleSet = new natural.RuleSet('EN');
 const tagger = new natural.BrillPOSTagger(lexicon, ruleSet);
 
-const tagFilter = ['NNP', 'VBN', 'NN']
+// TODO make this dynamic
+const tagFilter = ['VBG', 'VB']
 
 type TaggedWords = {
     taggedWords: { token: string, tag: string }[]
