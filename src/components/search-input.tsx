@@ -13,7 +13,7 @@ export default function SearchInput({ loading, placeholder, onSearch }: Props) {
 
     return (
         <div className="flex justify-center">
-            <div className="flex space-x-2 w-full max-w-[50%]">
+            <div className="flex space-x-2 w-full max-w-[40%]">
                 <Input
                     type="input"
                     placeholder={placeholder}
