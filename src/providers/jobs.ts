@@ -14,7 +14,7 @@ type response = {
     }
 }
 
-export async function getJobData(query: string): Promise<string[]> {
+export async function getJobDescriptions(query: string): Promise<string[]> {
     try {
         const resp = await fetch(`${url}/search?query=${encodeURI(query)}`, options);
         const { data } = await resp.json() as response;
