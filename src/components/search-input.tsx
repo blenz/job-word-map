@@ -12,7 +12,7 @@ export default function SearchInput({ loading, placeholder, onSearch }: Props) {
     const [input, setInput] = useState('')
 
     return (
-        <div className="flex justify-center">
+        <div className="flex justify-center bg-slate-400 shadow-inner p-8">
             <div className="flex space-x-2 w-full max-w-[40%]">
                 <Input
                     type="input"
