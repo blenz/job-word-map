@@ -19,6 +19,7 @@ export default function SearchInput({ loading, placeholder, onSearch }: Props) {
                     placeholder={placeholder}
                     onChange={(e) => setInput(e.target.value)}
                     disabled={loading}
+                    onKeyDown={({ key }) => key === "Enter" && onSearch(input)}
                 />
                 <Button
                     type="submit"
