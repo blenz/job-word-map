@@ -22,7 +22,7 @@ export default function SearchInput({ loading, values, placeholder, onSearch }: 
     useEffect(() => setValue(values[0]), [values])
 
     return (
-        <div className="flex justify-center bg-slate-400 shadow-inner p-8">
+        <div className="flex justify-center bg-sky-700 shadow-inner p-8">
             <div className="flex space-x-2 w-full max-w-[40%]">
                 <div className="flex">
                     <Input
@@ -73,7 +73,7 @@ export default function SearchInput({ loading, values, placeholder, onSearch }: 
 
                 <Button
                     type="submit"
-                    className="bg-blue-500"
+                    className="bg-blue-900"
                     onClick={() => onSearch(input, value as WordType)}
                     disabled={!input || loading}
                 >
