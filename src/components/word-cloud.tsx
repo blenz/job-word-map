@@ -1,20 +1,22 @@
 import { Text } from '@visx/text';
-import { WordFreq } from '@/types'
 import Wordcloud from '@visx/wordcloud/lib/Wordcloud'
 import { scaleLog } from '@visx/scale';
 import { Spinner } from './spinner';
+import { BaseDatum } from '@visx/wordcloud/lib/types';
 
 const colors = ['#143059', '#2F6B9A', '#82a6c2'];
+
+export type WordFreq = BaseDatum & { value: number }
 
 interface Props {
     wordFreqs: WordFreq[]
     loading: boolean
 }
 
-export default function WordCloud({ wordFreqs, loading }: Props) {
+export function WordCloud({ wordFreqs, loading }: Props) {
     const fontScaleVals: number[] = wordFreqs.map(w => w.value)
     const fontScaleDomain: number[] = [Math.min(...fontScaleVals), Math.max(...fontScaleVals)]
-    const fontScale = scaleLog({ domain: fontScaleDomain, range: [10, 100] })
+    const fontScale = scaleLog({ domain: fontScaleDomain, range: [10, 300] })
     const fontSizeSetter = (wordFreq: WordFreq) => fontScale(wordFreq.value);
 
     return (
@@ -46,6 +48,7 @@ export default function WordCloud({ wordFreqs, loading }: Props) {
                                 transform={`translate(${w.x}, ${w.y}) rotate(${w.rotate})`}
                                 fontSize={w.size}
                                 fontFamily={w.font}
+                            // onMouseEnter={() => console.log(w.size)}
                             >
                                 {w.text}
                             </Text>

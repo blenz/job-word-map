@@ -2,9 +2,8 @@
 
 import { useEffect, useState } from "react";
 import { getWordFreqs, getWordTypes } from "./actions";
-import { WordFreq } from "@/types";
+import { WordCloud, WordFreq } from "@/components/word-cloud";
 import SearchInput from "@/components/search-input";
-import WordCloud from "@/components/word-cloud";
 
 export default function App() {
   const [wordFreqs, setWords] = useState<WordFreq[]>([])

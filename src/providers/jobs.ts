@@ -8,23 +8,33 @@ const options = {
     }
 };
 
-type Response = {
-    data: {
-        [key: number]: { job_description: string }
+type Job = {
+    job_highlights: {
+        Qualifications?: string[]
+        Responsibilities?: string[]
     }
 }
 
-export async function getJobDescriptions(query: string): Promise<string[]> {
+type Response = {
+    data: {
+        [key: number]: Job
+    }
+}
+
+export async function getJobDetails(query: string): Promise<string[]> {
     try {
         const url = process.env.RAPIDAPI_KEY
-            ? `${base_url}/search?query=${encodeURI(query)}`
+            ? `${base_url}/search?query=${encodeURI(query)}&num_pages=5`
             : 'http://localhost:3000/data.json'
 
         const resp = await fetch(url, options);
         const { data } = await resp.json() as Response;
 
-        return Object.values(data).map(v => v.job_description)
+        return Object.values(data).flatMap(({ job_highlights }) => [
+            ...job_highlights?.Qualifications || [],
+            ...job_highlights?.Responsibilities || [],
+        ])
     } catch (error) {
-        throw new Error(`error fetching data: ${error}`)
+        throw new Error(error as string)
     }
 }

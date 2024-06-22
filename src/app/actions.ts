@@ -1,15 +1,20 @@
 "use server"
 
-import { WordFreq } from "@/types"
-import { createWordFreqs } from "@/services"
-import { getJobDescriptions } from "@/providers/jobs"
-import { getWordTypeKeys } from "@/providers/pos";
+import { WordFreq } from "@/components/word-cloud";
+import service from "@/service"
 
 export async function getWordFreqs(job: string, wordType: string): Promise<WordFreq[]> {
-    const descs = await getJobDescriptions(job)
-    return createWordFreqs(descs, wordType)
+    try {
+        return await service.buildWordFreqs(job, wordType)
+    } catch (error) {
+        throw new Error(error as string)
+    }
 }
 
 export async function getWordTypes(): Promise<string[]> {
-    return getWordTypeKeys()
+    try {
+        return service.getWordTypes()
+    } catch (error) {
+        throw new Error(error as string)
+    }
 }
