@@ -15,7 +15,7 @@ type TaggedWords = {
     taggedWords: { token: string, tag: string }[]
 }
 
-export function parseKeyWords(tokens: string[], wordType: string): string[] {
+export function parseWords(tokens: string[], wordType: string): string[] {
     const { taggedWords } = tagger.tag(tokens) as TaggedWords
     const tagFilter = wordTypes[wordType]
 

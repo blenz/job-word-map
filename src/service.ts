@@ -1,5 +1,5 @@
-import { getJobDetails } from "@/providers/jobs"
-import { parseKeyWords, getWordTypeKeys } from './providers/pos'
+import { getJobDetails } from "@/providers/job-data"
+import { parseWords, getWordTypeKeys } from './providers/word-parser'
 import { WordFreq } from "@/components/word-cloud"
 
 async function buildWordFreqs(job: string, wordType: string): Promise<WordFreq[]> {
@@ -9,7 +9,7 @@ async function buildWordFreqs(job: string, wordType: string): Promise<WordFreq[]
 
     jobDetails.forEach(detail => {
         const cleanedDesc = detail.split(' ').map(d => d.replace(',', '')).filter(d => !Number.isInteger(d))
-        const parsedWords = parseKeyWords(cleanedDesc, wordType)
+        const parsedWords = parseWords(cleanedDesc, wordType)
 
         parsedWords.forEach(word => {
             const key = word.toLowerCase()
