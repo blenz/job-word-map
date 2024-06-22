@@ -1,7 +1,7 @@
 "use server"
 
 import { WordFreq } from "@/components/word-cloud";
-import service from "@/service"
+import { service } from "@/services/word-frequency"
 
 export async function getWordFreqs(job: string, wordType: string): Promise<WordFreq[]> {
     try {

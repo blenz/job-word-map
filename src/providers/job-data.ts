@@ -21,10 +21,10 @@ type Response = {
     }
 }
 
-export async function getJobDetails(query: string): Promise<string[]> {
+async function getDetails(job: string): Promise<string[]> {
     try {
         const url = process.env.RAPIDAPI_KEY
-            ? `${base_url}/search?query=${encodeURI(query)}&num_pages=5`
+            ? `${base_url}/search?query=${encodeURI(job)}&num_pages=5`
             : 'http://localhost:3000/data.json'
 
         const resp = await fetch(url, options);
@@ -37,4 +37,8 @@ export async function getJobDetails(query: string): Promise<string[]> {
     } catch (error) {
         throw new Error(error as string)
     }
+}
+
+export const jobData = {
+    getDetails,
 }
