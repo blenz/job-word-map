@@ -5,18 +5,19 @@ import { cn, capitalize } from "@/lib/utils"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { Command, CommandGroup, CommandItem } from "@/components/ui/command"
 import { ChevronsUpDown, Check } from "lucide-react"
+import { WordType } from "@/lib/word-parser"
 
 interface Props {
     loading: boolean
-    values: string[]
+    values: WordType[]
     placeholder: string
-    onSearch: (input: string, value: string) => void
+    onSearch: (input: string, value: WordType) => void
 }
 
 export default function SearchInput({ loading, values, placeholder, onSearch }: Props) {
-    const [input, setInput] = useState('')
-    const [open, setOpen] = useState(false)
-    const [value, setValue] = useState('')
+    const [input, setInput] = useState<string>('')
+    const [open, setOpen] = useState<boolean>(false)
+    const [value, setValue] = useState<WordType>()
 
     useEffect(() => setValue(values[0]), [values])
 
@@ -28,7 +29,7 @@ export default function SearchInput({ loading, values, placeholder, onSearch }: 
                         type="input"
                         placeholder={placeholder}
                         onChange={e => setInput(e.target.value)}
-                        onKeyDown={({ key }) => key === "Enter" && onSearch(input, value)}
+                        onKeyDown={({ key }) => key === "Enter" && onSearch(input, value as WordType)}
                         disabled={loading}
                         className="rounded-br-none rounded-tr-none focus-visible:ring-offset-0 focus-visible:ring-0"
                     />
@@ -53,7 +54,7 @@ export default function SearchInput({ loading, values, placeholder, onSearch }: 
                                         <CommandItem
                                             key={val}
                                             value={val}
-                                            onSelect={val => { setValue(val); setOpen(false) }}
+                                            onSelect={val => { setValue(val as WordType); setOpen(false) }}
                                         >
                                             <Check
                                                 className={cn(
@@ -73,7 +74,7 @@ export default function SearchInput({ loading, values, placeholder, onSearch }: 
                 <Button
                     type="submit"
                     className="bg-blue-500"
-                    onClick={() => onSearch(input, value)}
+                    onClick={() => onSearch(input, value as WordType)}
                     disabled={!input || loading}
                 >
                     Search

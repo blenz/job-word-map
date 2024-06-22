@@ -1,8 +1,8 @@
 import { jobData } from "@/providers/job-data"
-import { wordParser } from '@/lib/word-parser'
+import { wordParser, WordType } from '@/lib/word-parser'
 import { WordFreq } from "@/components/word-cloud"
 
-async function buildWordFreqs(job: string, wordType: string): Promise<WordFreq[]> {
+async function buildWordFreqs(job: string, wordType: WordType): Promise<WordFreq[]> {
     const wordFreqs: Map<string, number> = new Map()
 
     const jobDetails = await jobData.getDetails(job)
@@ -21,7 +21,7 @@ async function buildWordFreqs(job: string, wordType: string): Promise<WordFreq[]
     return Array.from(wordFreqs).map<WordFreq>(([text, value]) => ({ text, value }))
 }
 
-function getWordTypes(): string[] {
+function getWordTypes(): WordType[] {
     return wordParser.getWordTypes()
 }
 

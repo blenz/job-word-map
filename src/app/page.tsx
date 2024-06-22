@@ -4,11 +4,12 @@ import { useEffect, useState } from "react";
 import { getWordFreqs, getWordTypes } from "./actions";
 import { WordCloud, WordFreq } from "@/components/word-cloud";
 import SearchInput from "@/components/search-input";
+import { WordType } from "@/lib/word-parser";
 
 export default function App() {
   const [wordFreqs, setWords] = useState<WordFreq[]>([])
   const [loading, setLoading] = useState<boolean>(false)
-  const [wordTypes, setWordTypes] = useState<string[]>([])
+  const [wordTypes, setWordTypes] = useState<WordType[]>([])
 
   useEffect(() => {
     (async () => {
@@ -16,7 +17,7 @@ export default function App() {
     })()
   }, [])
 
-  const searchJob = async (job: string, wordType: string) => {
+  const searchJob = async (job: string, wordType: WordType) => {
     try {
       setLoading(true)
       const wordFreqs = await getWordFreqs(job, wordType)

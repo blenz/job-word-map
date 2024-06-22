@@ -1,9 +1,10 @@
 "use server"
 
 import { WordFreq } from "@/components/word-cloud";
+import { WordType } from "@/lib/word-parser";
 import { service } from "@/services/word-frequency"
 
-export async function getWordFreqs(job: string, wordType: string): Promise<WordFreq[]> {
+export async function getWordFreqs(job: string, wordType: WordType): Promise<WordFreq[]> {
     try {
         return await service.buildWordFreqs(job, wordType)
     } catch (error) {
@@ -11,7 +12,7 @@ export async function getWordFreqs(job: string, wordType: string): Promise<WordF
     }
 }
 
-export async function getWordTypes(): Promise<string[]> {
+export async function getWordTypes(): Promise<WordType[]> {
     try {
         return service.getWordTypes()
     } catch (error) {
