@@ -1,10 +1,11 @@
 'use client'
 
+import Header from '@/components/header'
+import SearchInput from '@/components/search-input'
+import { WordCloud, WordFreq } from '@/components/word-cloud'
+import { WordType } from '@/lib/word-parser'
 import { useEffect, useState } from 'react'
 import { getWordFreqs, getWordTypes } from './actions'
-import { WordCloud, WordFreq } from '@/components/word-cloud'
-import SearchInput from '@/components/search-input'
-import { WordType } from '@/lib/word-parser'
 
 export default function App() {
   const [wordFreqs, setWords] = useState<WordFreq[]>([])
@@ -28,9 +29,12 @@ export default function App() {
   }
 
   return (
-    <div>
-      <SearchInput loading={loading} values={wordTypes} placeholder="Job" onSearch={searchJob} />
-      <WordCloud loading={loading} wordFreqs={wordFreqs} />
-    </div>
+    <>
+      <Header />
+      <div>
+        <SearchInput loading={loading} values={wordTypes} placeholder="Job" onSearch={searchJob} />
+        <WordCloud loading={loading} wordFreqs={wordFreqs} />
+      </div>
+    </>
   )
 }
