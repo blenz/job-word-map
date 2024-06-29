@@ -1,6 +1,14 @@
 name: Deploy App
 
-on: [push]
+on:
+  push:
+    branches:
+      - main
+      - deploy/*
+
+permissions:
+  id-token: write
+  contents: read
 
 jobs:
   terraform-apply:
@@ -10,18 +18,25 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Restore Terraform
-        id: cache
+        id: terraform-cache
         uses: actions/cache@v4
         with:
           path: ci/cache/docker/terraform
           key: ${{ hashFiles('./infra/Dockerfile') }}
 
       - name: Build Terraform
-        if: steps.cache.outputs.cache-hit != 'true'
+        if: steps.terraform-cache.outputs.cache-hit != 'true'
         run: |
           docker build -t terraform infra/
           mkdir -p ci/cache/docker/terraform
           docker image save terraform --output ./ci/cache/docker/terraform/image.tar
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-region: ${{ vars.AWS_REGION }}
+          role-to-assume: ${{ vars.DEPLOY_ROLE_ARN }}
+          role-session-name: terraform
 
       - name: Terraform Apply
         run: |
@@ -31,11 +46,11 @@ jobs:
             docker run --rm --entrypoint terraform \
               -w /tmp/terraform \
               -v $PWD/infra:/tmp/terraform \
-              -e TF_CLI_ARGS_init=-backend-config="bucket=${{ secrets.TF_BACKEND_BUCKET }}" \
               -e TF_CLI_ARGS_apply=-auto-approve \
-              -e AWS_REGION=us-west-2 \
-              -e AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }} \
-              -e AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }} \
+              -e AWS_REGION=${{ vars.AWS_REGION }} \
+              -e AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID \
+              -e AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY \
+              -e AWS_SESSION_TOKEN=$AWS_SESSION_TOKEN \
               -e TF_VAR_github_token=${{ secrets.GH_TOKEN }} \
               terraform $cmd
           done
