@@ -22,8 +22,8 @@ export default function SearchInput({ loading, values, placeholder, onSearch }: 
   useEffect(() => setValue(values[0]), [values])
 
   return (
-    <div className="flex justify-center bg-sky-700 p-8 shadow-inner">
-      <div className="flex w-full max-w-[40%] space-x-2">
+    <div className="flex justify-center p-8">
+      <div className="flex justify-center space-x-2">
         <div className="flex">
           <Input
             type="input"
@@ -31,7 +31,7 @@ export default function SearchInput({ loading, values, placeholder, onSearch }: 
             onChange={e => setInput(e.target.value)}
             onKeyDown={({ key }) => key === 'Enter' && onSearch(input, value as WordType)}
             disabled={loading}
-            className="rounded-br-none rounded-tr-none focus-visible:ring-0 focus-visible:ring-offset-0"
+            className="w-72 rounded-br-none rounded-tr-none focus-visible:ring-0 focus-visible:ring-offset-0"
           />
 
           <Popover open={open} onOpenChange={setOpen}>
@@ -40,7 +40,7 @@ export default function SearchInput({ loading, values, placeholder, onSearch }: 
                 variant="outline"
                 role="combobox"
                 aria-expanded={open}
-                className="w-[200px] justify-between rounded-bl-none rounded-tl-none"
+                className="w-[150px] justify-between rounded-bl-none rounded-tl-none"
                 disabled={loading || !values.length}
               >
                 {capitalize(values.find(val => val === value) || '')}
@@ -71,7 +71,7 @@ export default function SearchInput({ loading, values, placeholder, onSearch }: 
 
         <Button
           type="submit"
-          className="bg-blue-900"
+          className="bg-blue-700"
           onClick={() => onSearch(input, value as WordType)}
           disabled={!input || loading}
         >
