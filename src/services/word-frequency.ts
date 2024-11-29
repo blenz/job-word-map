@@ -1,6 +1,6 @@
 import { WordFreq } from '@/components/word-cloud'
 import { WordParser, wordParser, WordType } from '@/lib/word-parser'
-import { JobDataProvider, jobDataProvider } from '@/providers/job-data'
+import { jobDataService, JobDataService } from '@/services/job-data'
 
 export interface WordFrequencyService {
   generateWordFreqs(job: string, wordType: WordType): Promise<WordFreq[]>
@@ -9,14 +9,14 @@ export interface WordFrequencyService {
 
 class Service implements WordFrequencyService {
   constructor(
-    private jobDataProvider: JobDataProvider,
+    private jobDataService: JobDataService,
     private wordParser: WordParser
   ) {}
 
   async generateWordFreqs(job: string, wordType: WordType): Promise<WordFreq[]> {
     const wordFreqs: Map<string, number> = new Map()
 
-    const jobDetails = await this.jobDataProvider.getDetails(job)
+    const jobDetails = await this.jobDataService.getDetails(job)
 
     jobDetails.forEach(detail => {
       const cleanedDesc = detail
@@ -40,4 +40,4 @@ class Service implements WordFrequencyService {
   }
 }
 
-export const wordFrequencyService = new Service(jobDataProvider, wordParser)
+export const wordFrequencyService = new Service(jobDataService, wordParser)

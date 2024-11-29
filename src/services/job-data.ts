@@ -11,11 +11,11 @@ type Response = {
   }
 }
 
-export interface JobDataProvider {
+export interface JobDataService {
   getDetails(job: string): Promise<string[]>
 }
 
-class Provider implements JobDataProvider {
+class Provider implements JobDataService {
   private options: RequestInit
 
   constructor(private api_key?: string) {
@@ -47,4 +47,4 @@ class Provider implements JobDataProvider {
   }
 }
 
-export const jobDataProvider = new Provider(process.env.RAPIDAPI_KEY)
+export const jobDataService = new Provider(process.env.RAPIDAPI_KEY)
