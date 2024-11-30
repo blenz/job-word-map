@@ -84,7 +84,7 @@ resource "aws_iam_role" "this" {
 
 resource "null_resource" "deploy" {
   triggers = {
-    sha = sha1(join("", [for f in fileset(path.cwd, "./src/**") : filesha1("${path.cwd}/${f}")]))
+    now = timestamp()
   }
   provisioner "local-exec" {
     command = "curl -X POST -H 'Content-Type:application/json' '${sensitive(aws_amplify_webhook.this.url)}'"
