@@ -7,6 +7,12 @@ variable "github_token" {
   sensitive = true
 }
 
+variable "rapid_api_key" {
+  type      = string
+  sensitive = true
+}
+
+
 terraform {
   backend "s3" {
     bucket = "terraform-26214"
@@ -25,7 +31,9 @@ resource "aws_amplify_app" "this" {
   access_token         = var.github_token
   iam_service_role_arn = aws_iam_role.this.arn
 
-  environment_variables = { _ = 1 }
+  environment_variables = {
+    RAPID_API_KEY = var.rapid_api_key
+  }
 
   build_spec = <<-EOT
     version: 1

@@ -52,5 +52,6 @@ jobs:
               -e AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY \
               -e AWS_SESSION_TOKEN=$AWS_SESSION_TOKEN \
               -e TF_VAR_github_token=${{ secrets.GH_TOKEN }} \
+              -e TF_VAR_rapid_api_key=${{ secrets.RAPID_API_KEY }} \
               terraform $cmd
           done

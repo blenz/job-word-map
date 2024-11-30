@@ -47,4 +47,4 @@ class Provider implements JobDataService {
   }
 }
 
-export const jobDataService = new Provider(process.env.RAPIDAPI_KEY)
+export const jobDataService = new Provider(process.env.RAPID_API_KEY)
