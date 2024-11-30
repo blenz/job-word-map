@@ -44,6 +44,7 @@ resource "aws_amplify_app" "this" {
             - npm ci
         build:
           commands:
+            - env | grep RAPID_API_KEY >> .env.production
             - npm run build
       artifacts:
         baseDirectory: .next
