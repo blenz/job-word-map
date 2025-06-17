@@ -12,15 +12,14 @@ variable "rapid_api_key" {
   sensitive = true
 }
 
-
 terraform {
   backend "s3" {
-    bucket = "terraform-26214"
-    key    = "job-word-map/terraform.state"
-    region = "us-west-2"
+    region  = "us-west-2"
+    bucket  = "terraform-state-20250613"
+    key     = "job-word-map.tfstate"
+    encrypt = true
   }
 }
-
 
 provider "aws" {}
 
