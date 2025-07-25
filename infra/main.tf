@@ -1,4 +1,5 @@
 locals {
+  domain_name  = "blenz.dev"
   project_name = "job-word-map"
 }
 
@@ -12,6 +13,15 @@ variable "rapid_api_key" {
   sensitive = true
 }
 
+variable "porkbun_api_key" {
+  type = string
+}
+
+variable "porkbun_secret_api_key" {
+  type      = string
+  sensitive = true
+}
+
 terraform {
   backend "s3" {
     region  = "us-west-2"
@@ -19,9 +29,31 @@ terraform {
     key     = "job-word-map.tfstate"
     encrypt = true
   }
+
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "6.0.0"
+    }
+    porkbun = {
+      source  = "cullenmcdermott/porkbun"
+      version = "0.3.0"
+    }
+  }
 }
 
-provider "aws" {}
+provider "aws" {
+  default_tags {
+    tags = {
+      Project = local.project_name
+    }
+  }
+}
+
+provider "porkbun" {
+  api_key    = var.porkbun_api_key
+  secret_key = var.porkbun_secret_api_key
+}
 
 resource "aws_amplify_app" "this" {
   name                 = local.project_name
@@ -84,10 +116,11 @@ resource "aws_iam_role" "this" {
       Action = "sts:AssumeRole"
     }]
   })
+}
 
-  managed_policy_arns = [
-    "arn:aws:iam::aws:policy/service-role/AmplifyBackendDeployFullAccess"
-  ]
+resource "aws_iam_role_policy_attachments_exclusive" "this" {
+  role_name   = aws_iam_role.this.name
+  policy_arns = ["arn:aws:iam::aws:policy/service-role/AmplifyBackendDeployFullAccess"]
 }
 
 resource "null_resource" "deploy" {
@@ -97,4 +130,29 @@ resource "null_resource" "deploy" {
   provisioner "local-exec" {
     command = "curl -X POST -H 'Content-Type:application/json' '${sensitive(aws_amplify_webhook.this.url)}'"
   }
+}
+
+resource "aws_amplify_domain_association" "this" {
+  app_id      = aws_amplify_app.this.id
+  domain_name = "${local.project_name}.${local.domain_name}"
+
+  sub_domain {
+    branch_name = aws_amplify_branch.this.branch_name
+    prefix      = ""
+  }
+}
+
+resource "porkbun_dns_record" "this" {
+  name    = local.project_name
+  domain  = local.domain_name
+  content = [for sub_domain in aws_amplify_domain_association.this.sub_domain : split(" ", sub_domain.dns_record)[2]][0]
+  type    = "CNAME"
+}
+
+
+resource "porkbun_dns_record" "dns_verification" {
+  name    = trimsuffix(split(" ", aws_amplify_domain_association.this.certificate_verification_dns_record)[0], ".${local.domain_name}.")
+  domain  = local.domain_name
+  content = split(" ", aws_amplify_domain_association.this.certificate_verification_dns_record)[2]
+  type    = "CNAME"
 }

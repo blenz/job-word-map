@@ -1,28 +1,25 @@
-APP_NAME=job-word-map
-TERRAFORM_NAME=$(APP_NAME)-terraform
-
-WORKDIR=/tmp/dev
+NAME=job-word-map
+INFRA_NAME=$(NAME)-infra
 
 build-app:
-	@docker build -t $(APP_NAME) .
+	@docker build -t $(NAME) .
 
 app:
-	@docker run --rm -it --name $(APP_NAME) \
-		-w $(WORKDIR) \
-		-v $(PWD):$(WORKDIR) \
+	@docker run --rm -it --name $(NAME) \
+		-w $(NAME) \
+		-v $(PWD):$(NAME) \
 		-p 3000:3000 \
-		$(APP_NAME)
+		$(NAME)
 
 sh:
-	@docker exec -it $(APP_NAME) sh
+	@docker exec -it $(NAME) sh
 
 build-terraform:
-	@docker build -t $(TERRAFORM_NAME) infra
+	@docker build -t $(INFRA_NAME) infra
 
 terraform:
-	@docker run --rm -it --name $(TERRAFORM_NAME) \
-	-w $(WORKDIR) \
+	@docker run --rm -it --name $(INFRA_NAME) \
+	-w /$(INFRA_NAME) \
+	-v $(PWD)/infra:/$(INFRA_NAME) \
 	-v ~/.aws:/root/.aws \
-	-v $(PWD)/infra:$(WORKDIR) \
-	--env-file $(PWD)/.env.local \
-	$(TERRAFORM_NAME)
+	$(INFRA_NAME)
