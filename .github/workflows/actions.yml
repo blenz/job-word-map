@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - main
-      - deploy/*
 
 permissions:
   id-token: write
@@ -36,7 +35,6 @@ jobs:
         with:
           aws-region: ${{ vars.AWS_REGION }}
           role-to-assume: ${{ vars.DEPLOY_ROLE_ARN }}
-          role-session-name: terraform
 
       - name: Terraform Apply
         run: |
@@ -53,5 +51,7 @@ jobs:
               -e AWS_SESSION_TOKEN=$AWS_SESSION_TOKEN \
               -e TF_VAR_github_token=${{ secrets.GH_TOKEN }} \
               -e TF_VAR_rapid_api_key=${{ secrets.RAPID_API_KEY }} \
+              -e TF_VAR_porkbun_api_key=${{ secrets.PORKBUN_API_KEY }} \
+              -e TF_VAR_porkbun_secret_api_key=${{ secrets.PORKBUN_SECRET_API_KEY }} \
               terraform $cmd
           done
